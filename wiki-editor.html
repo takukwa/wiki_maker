@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>나무위키 문서 에디터</title>
+<title>나무위키 캐릭터 문서 제작기</title>
 
 <style>
 
@@ -14,35 +14,59 @@ display:flex;
 flex-direction:column;
 }
 
-.editor-container{
+.main{
 flex:1;
 display:flex;
 }
 
-textarea{
+.left{
 width:33%;
-border:none;
 padding:15px;
-font-family:monospace;
-font-size:14px;
 border-right:1px solid #ccc;
-resize:none;
-outline:none;
+overflow:auto;
+background:#fafafa;
 }
 
-.preview{
+.right{
 width:67%;
 border:none;
 }
 
-.code-view{
-height:200px;
+.preview{
+width:100%;
+height:100%;
+border:none;
+}
+
+.code{
+height:220px;
 border-top:1px solid #ccc;
 padding:10px;
-font-family:monospace;
+background:#f4f4f4;
 overflow:auto;
-background:#f5f5f5;
+font-family:monospace;
 white-space:pre-wrap;
+}
+
+input,textarea{
+width:100%;
+margin-bottom:10px;
+padding:6px;
+font-size:14px;
+box-sizing:border-box;
+}
+
+textarea{
+height:120px;
+}
+
+h3{
+margin-top:20px;
+}
+
+button{
+padding:8px 12px;
+cursor:pointer;
 }
 
 </style>
@@ -50,32 +74,109 @@ white-space:pre-wrap;
 
 <body>
 
-<div class="editor-container">
+<div class="main">
 
-<textarea id="input" placeholder="여기에 HTML 입력"></textarea>
+<div class="left">
 
-<iframe id="preview" class="preview"></iframe>
+<h3>캐릭터 정보</h3>
+
+<input id="name" placeholder="캐릭터 이름">
+<input id="namejp" placeholder="일본어 이름">
+<input id="birth" placeholder="출생">
+<input id="age" placeholder="연령">
+<input id="body" placeholder="신체 (예: 167cm, 58kg)">
+<input id="group" placeholder="소속">
+
+<h3>개요</h3>
+
+<textarea id="summary" placeholder="캐릭터 개요 작성"></textarea>
+
+<h3>성격</h3>
+
+<textarea id="personality"></textarea>
+
+<h3>행적</h3>
+
+<textarea id="story"></textarea>
+
+<button onclick="generate()">문서 생성</button>
 
 </div>
 
-<div id="code" class="code-view"></div>
+<div class="right">
+<iframe id="preview" class="preview"></iframe>
+</div>
+
+</div>
+
+<div id="code" class="code"></div>
 
 <script>
 
-const input = document.getElementById("input")
-const preview = document.getElementById("preview")
-const code = document.getElementById("code")
+function generate(){
 
-function update(){
+const name = document.getElementById("name").value
+const namejp = document.getElementById("namejp").value
+const birth = document.getElementById("birth").value
+const age = document.getElementById("age").value
+const body = document.getElementById("body").value
+const group = document.getElementById("group").value
+const summary = document.getElementById("summary").value
+const personality = document.getElementById("personality").value
+const story = document.getElementById("story").value
 
-const html = input.value
+const html = `
+<div id="wikiwrap">
 
-preview.srcdoc = html
-code.textContent = html
+<table border="1" style="border-collapse:collapse;width:100%">
+<tr>
+<th colspan="2" style="background:#ffba86;color:white;font-size:20px">${name}<br>${namejp}</th>
+</tr>
+
+<tr>
+<td colspan="2">
+<img src="이미지주소" style="width:100%">
+</td>
+</tr>
+
+<tr>
+<td style="background:#ffba86;color:white;width:30%">출생</td>
+<td>${birth}</td>
+</tr>
+
+<tr>
+<td style="background:#ffba86;color:white">연령</td>
+<td>${age}</td>
+</tr>
+
+<tr>
+<td style="background:#ffba86;color:white">신체</td>
+<td>${body}</td>
+</tr>
+
+<tr>
+<td style="background:#ffba86;color:white">소속</td>
+<td>${group}</td>
+</tr>
+
+</table>
+
+<h2>1. 개요</h2>
+<p>${summary}</p>
+
+<h2>2. 성격</h2>
+<p>${personality}</p>
+
+<h2>3. 작중 행적</h2>
+<p>${story}</p>
+
+</div>
+`
+
+document.getElementById("preview").srcdoc = html
+document.getElementById("code").textContent = html
 
 }
-
-input.addEventListener("input",update)
 
 </script>
 
