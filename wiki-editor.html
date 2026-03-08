@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>나무위키 문서 에디터</title>
+
+<style>
+
+body{
+margin:0;
+font-family:sans-serif;
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+.editor-container{
+flex:1;
+display:flex;
+}
+
+textarea{
+width:33%;
+border:none;
+padding:15px;
+font-family:monospace;
+font-size:14px;
+border-right:1px solid #ccc;
+resize:none;
+outline:none;
+}
+
+.preview{
+width:67%;
+border:none;
+}
+
+.code-view{
+height:200px;
+border-top:1px solid #ccc;
+padding:10px;
+font-family:monospace;
+overflow:auto;
+background:#f5f5f5;
+white-space:pre-wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="editor-container">
+
+<textarea id="input" placeholder="여기에 HTML 입력"></textarea>
+
+<iframe id="preview" class="preview"></iframe>
+
+</div>
+
+<div id="code" class="code-view"></div>
+
+<script>
+
+const input = document.getElementById("input")
+const preview = document.getElementById("preview")
+const code = document.getElementById("code")
+
+function update(){
+
+const html = input.value
+
+preview.srcdoc = html
+code.textContent = html
+
+}
+
+input.addEventListener("input",update)
+
+</script>
+
+</body>
+</html>
